@@ -1,25 +1,33 @@
 defmodule RomanNumerals do
 
-  def convert(n) when n >= 10 do
-    "X" <> convert(n-10)
+  def convert(n) when n >= 0 do
+    convert(n, "")
   end
 
-  def convert(n) when n >= 9 do
-    "IX" <> convert(n-9)
+  @glyphs [
+    {100, "C"},
+    { 90, "XC"},
+    { 50, "L"},
+    { 40, "XL"},
+    { 10, "X"},
+    {  9, "IX"},
+    {  5, "V"},
+    {  4, "IV"},
+    {  1, "I"}
+  ]
+
+  def next_glyph(n) do
+    Enum.find @glyphs, fn ({x, _glyph}) -> n >= x end
   end
 
-  def convert(n) when n >= 5 do
-    "V" <> convert(n-5)
+  defp convert(0, string) do
+    string
   end
 
-  def convert(n) when n >= 4 do
-    "IV" <> convert(n-4)
-  end
+  defp convert(n, string) when n > 0 do
+    {arabic, latin} = next_glyph(n)
 
-  def convert(n) when n >= 1 do
-    "I" <> convert(n-1)
+    convert(n-arabic, string <> latin)
   end
-
-  def convert(0), do: ""
 
 end
